@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Export Resources</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        #add-button {
+            display: none;
+            position: absolute;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Export Resources</h1>
+        <form method="POST" action="/export">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <br>
+            <label for="subject">Subject:</label>
+            <input type="text" id="subject" name="subject" required>
+            <br>
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" required></textarea>
+            <br>
+            <button type="submit">Send Email</button>
+        </form>
+        <a href="/">Back to Resources</a>
+    </div>
+    <div class="container">
+        <h1>Resources</h1>
+        <form method="GET" action="/export">
+            <input type="text" name="search" placeholder="Search by title, description, or topics">
+            <button type="submit">Search</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Topics</th>
+                    <th>Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resource in resources %}
+                <tr>
+                    <td class="max-width">
+                        {% if resource.link %}
+                        <a href="{{ resource.link }}" target="_blank">{{ resource.title }}</a>
+                        {% else %}
+                        {{ resource.title }}
+                        {% endif %}
+                    </td>
+                    <td class="max-width">{{ resource.description }}</td>
+                    <td class="max-width">{{ resource.topics }}</td>
+                    <td class="max-width">{{ resource.level }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <button id="add-button" onclick="addToMessage()">Add</button>
+    <script>
+        document.addEventListener('mouseup', function(event) {
+            const selectedText = window.getSelection().toString().trim();
+            const addButton = document.getElementById('add-button');
+            if (selectedText) {
+                const rect = window.getSelection().getRangeAt(0).getBoundingClientRect();
+                addButton.style.top = `${rect.bottom + window.scrollY}px`;
+                addButton.style.left = `${rect.right + window.scrollX}px`;
+                addButton.style.display = 'block';
+            } else {
+                addButton.style.display = 'none';
+            }
+        });
+
+        function addToMessage() {
+            const selectedText = window.getSelection().toString().trim();
+            const messageTextarea = document.getElementById('message');
+            if (selectedText) {
+                messageTextarea.value += selectedText + '\n';
+            }
+            document.getElementById('add-button').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

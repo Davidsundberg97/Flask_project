@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Resource</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .form-group {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Update Resource</h1>
+    <form method="POST" action="/update/{{ resource.id }}">
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" value="{{ resource.title }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="link">Link:</label>
+            <input type="url" id="link" name="link" value="{{ resource.link }}" placeholder="https://example.com">
+        </div>
+        
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required>{{ resource.description }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="topics">Topics:</label>
+            <input type="text" id="topics" name="topics" value="{{ resource.topics }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="level">Level:</label>
+            <select id="level" name="level" required>
+                <option value="beginner" {% if resource.level == 'beginner' %}selected{% endif %}>Beginner</option>
+                <option value="intermediate" {% if resource.level == 'intermediate' %}selected{% endif %}>Intermediate</option>
+                <option value="advanced" {% if resource.level == 'advanced' %}selected{% endif %}>Advanced</option>
+            </select>
+        </div>
+        
+        <button type="submit">Update Resource</button>
+    </form>
+</body>
+</html>
